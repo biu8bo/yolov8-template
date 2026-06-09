@@ -35,10 +35,7 @@ def parse_args():
 
     # 模型参数
     parser.add_argument("--model", type=str, default="yolov8n.pt",
-                        choices=["yolov8n.pt", "yolov8s.pt", "yolov8m.pt", "yolov8l.pt", "yolov8x.pt",
-                                 "yolov8n-cls.pt", "yolov8s-cls.pt",
-                                 "yolov8n-seg.pt", "yolov8s-seg.pt", "yolov8m-seg.pt"],
-                        help="预训练模型 (默认: yolov8n.pt)")
+                        help="预训练模型路径 (默认: yolov8n.pt)")
 
     # 数据集参数
     parser.add_argument("--data", type=str, default="dataset/data.yaml",
