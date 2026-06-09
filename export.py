@@ -71,8 +71,8 @@ def parse_args():
     parser.add_argument(
         "--opset",
         type=int,
-        default=11,
-        help="ONNX opset 版本 (默认: 11，兼容性最广)",
+        default=18,
+        help="ONNX opset 版本 (默认: 18)",
     )
 
     return parser.parse_args()
@@ -123,6 +123,20 @@ def main():
     print("导出完成!")
     print(f"导出路径: {export_path}")
     print("=" * 60)
+
+    # ---- ONNX: 合并外部数据为单文件 ----
+    if args.format == "onnx":
+        data_file = export_path + ".data"
+        if os.path.exists(data_file):
+            import onnx as onnx_lib
+            model = onnx_lib.load(export_path, load_external_data=True)
+            merged = str(export_path).replace(".onnx", "_merged.onnx")
+            onnx_lib.save(model, merged)
+            # 原拆分的两个文件可选删除
+            os.remove(export_path)
+            os.remove(data_file)
+            os.rename(merged, export_path)
+            print(f"  已合并外部数据 -> 单文件: {export_path}")
 
     # ---- ONNX 额外信息提示 ----
     if args.format == "onnx":
