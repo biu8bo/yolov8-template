@@ -64,7 +64,7 @@ runs/train/exp/
 
 ```bash
 # 单张图片推理
-python predict.py --model runs/detect/runs/train/exp/weights/best.pt --source test.png
+python predict.py --model runs/train/exp/weights/best.pt --source test.png
 
 # 使用预训练权重测试
 python predict.py --model yolov8n.pt --source test.png
