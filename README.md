@@ -117,7 +117,7 @@ python predict.py --model best.pt --source test.png --no-save --show
 python export.py
 
 # 指定模型路径
-python export.py --model runs/detect/runs/train/exp/weights/best.pt
+python export.py --model runs/train/exp/weights/best.pt
 
 # 导出 yolov8n.pt 预训练模型
 python export.py --model weights/yolov8n.pt
