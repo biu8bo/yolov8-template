@@ -6,7 +6,7 @@ YOLOv8 训练脚本
     python train.py --epochs 200 --batch 16  # 自定义参数
 
 数据集结构:
-    dataset/
+    datasets/
     ├── data.yaml          # 数据集配置文件
     ├── train/
     │   ├── images/        # 训练集图片
@@ -16,7 +16,7 @@ YOLOv8 训练脚本
         └── labels/        # 验证集标签
 
 data.yaml 示例:
-    path: ./dataset
+    path: ./datasets
     train: train/images
     val: val/images
     names:
@@ -38,8 +38,8 @@ def parse_args():
                         help="预训练模型路径 (默认: weights/yolov8s.pt)")
 
     # 数据集参数
-    parser.add_argument("--data", type=str, default="dataset/data.yaml",
-                        help="数据集配置文件路径 (默认: dataset/data.yaml)")
+    parser.add_argument("--data", type=str, default="datasets/data.yaml",
+                        help="数据集配置文件路径 (默认: datasets/data.yaml)")
 
     # 训练参数
     parser.add_argument("--epochs", type=int, default=100,
@@ -65,6 +65,8 @@ def parse_args():
                         help="训练设备: 0(GPU0), cpu, 或留空自动选择")
 
     # 数据增强
+    parser.add_argument("--amp", action="store_true", default=False,
+                        help="启用自动混合精度训练 (默认关闭，避免AMP检查阶段下载异常模型)")
     parser.add_argument("--augment", action="store_true", default=False,
                         help="启用更激进的数据增强")
 
@@ -92,7 +94,7 @@ def main():
     if not os.path.exists(args.data):
         print(f"[错误] 数据集配置文件不存在: {args.data}")
         print("请确保按以下结构准备数据集:")
-        print("  dataset/")
+        print("  datasets/")
         print("  ├── data.yaml")
         print("  ├── train/images/")
         print("  ├── train/labels/")
@@ -153,6 +155,7 @@ def main():
         close_mosaic=10,          # 最后10轮关闭mosaic增强
         cos_lr=True,              # 余弦学习率衰减
         warmup_epochs=3,          # 预热轮数
+        amp=args.amp,             # AMP混合精度 (默认关闭，避免bug)
         exist_ok=True,            # 覆盖同名实验目录
         seed=42,                  # 随机种子
     )

@@ -12,7 +12,7 @@ build/
 develop-eggs/
 .idea
 .workbuddy
-dataset/*
+datasets/*
 runs
 dist/
 downloads/
