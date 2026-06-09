@@ -27,15 +27,15 @@ data.yaml 示例:
 import argparse
 import os
 from ultralytics import YOLO
-
+import torch
 
 def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(description="YOLOv8 训练")
 
     # 模型参数
-    parser.add_argument("--model", type=str, default="yolov8n.pt",
-                        help="预训练模型路径 (默认: yolov8n.pt)")
+    parser.add_argument("--model", type=str, default="weights/yolov8s.pt",
+                        help="预训练模型路径 (默认: weights/yolov8s.pt)")
 
     # 数据集参数
     parser.add_argument("--data", type=str, default="dataset/data.yaml",
@@ -114,10 +114,19 @@ def main():
     print(f"  早停耐心:    {args.patience}")
     print("=" * 60)
 
+    print(f"  是否可以使用显卡推理:    {torch.cuda.is_available()}")  # 应该 True
+    if torch.cuda.is_available():
+        print(torch.cuda.get_device_name(0))  # 应该显示 RTX 5060
+
     # ---- 加载模型 ----
     print("\n[1/3] 加载模型...")
     if args.model == "":
-        args.model = "yolov8n.pt"
+        args.model = "weights/yolov8s.pt"
+    # 确保模型文件存在
+    if not os.path.exists(args.model):
+        print(f"[错误] 模型文件不存在: {args.model}")
+        print("请使用正确的模型路径，例如: --model weights/yolov8s.pt")
+        return
     model = YOLO(args.model)
 
     # ---- 开始训练 ----

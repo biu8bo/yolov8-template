@@ -11,7 +11,7 @@
 python train.py
 
 # 指定模型和轮数
-python train.py --model ./weights/yolov8s.pt --epochs 50 --batch 16 --imgsz 1080 --device 0
+python train.py --model weights/yolov8s.pt --epochs 50 --batch 16 --imgsz 1080 --device 0
 
 # 使用 GPU
 python train.py --epochs 100 --device 0
